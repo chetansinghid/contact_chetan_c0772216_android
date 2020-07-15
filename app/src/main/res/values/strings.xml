@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Phonebook</string>
+    <string name="search">Search Contacts</string>
+</resources>
