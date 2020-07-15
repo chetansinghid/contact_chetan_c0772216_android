@@ -8,12 +8,12 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/categories_tv"
+        android:id="@+id/contact_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:text="Categories"
+        android:text="Contacts"
         android:textColor="@android:color/black"
         android:textSize="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -26,9 +26,9 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:background="@android:color/transparent"
-        android:onClick="addContactClicked"
+        android:onClick="addContact"
         android:text="+"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/colorPrimary"
         android:textSize="32dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +44,7 @@
         android:background="@android:color/darker_gray"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/categories_tv" />
+        app:layout_constraintTop_toBottomOf="@id/contact_tv" />
 
     <SearchView
         android:id="@+id/search_view"
