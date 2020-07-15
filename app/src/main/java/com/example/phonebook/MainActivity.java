@@ -3,6 +3,7 @@ package com.example.phonebook;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
@@ -44,11 +45,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupInitialData() {
+        fetchDataForList();
+        setupListData();
+    }
+
+    private void fetchDataForList() {
         phonebookRepository = new PhonebookRepository(this.getApplication());
         contactList = phonebookRepository.getAllContactsFromDatabase();
         contactCount = phonebookRepository.getContactCountInDatabase();
+    }
+
+    private void setupListData() {
         recyclerView = findViewById(R.id.recycler_view);
         contactListAdapter = new ContactListAdapter(MainActivity.this, contactList);
+        recyclerView.setAdapter(contactListAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 
     private void checkRequiredPermissions() {
