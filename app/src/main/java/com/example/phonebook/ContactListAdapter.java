@@ -64,6 +64,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         return contactList.size();
     }
 
+    public void updateData(List<Contact> contactList) {
+        this.contactList = contactList;
+    }
+
     public class ContactListHolder extends RecyclerView.ViewHolder {
 
         Button iconButton;
@@ -77,5 +81,6 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
             phoneNo = itemView.findViewById(R.id.contact_number);
             cellLayout = itemView.findViewById(R.id.contact_cell_layout);
         }
+
     }
 }

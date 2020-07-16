@@ -38,27 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         checkRequiredPermissions();
         phonebookRepository = new PhonebookRepository(this.getApplication());
-
-        checkIntentIfAvailable();
         fetchDataForList();
         setupListData();
 
-    }
-
-    public void checkIntentIfAvailable() {
-        if(getIntent().hasExtra("save")) {
-            System.out.println("getting to intent");
-            Contact contact = (Contact) getIntent().getSerializableExtra("save");
-            phonebookRepository.insertContactInDatabase(contact);
-        }
-        if(getIntent().hasExtra("update")) {
-            Contact contact = (Contact) getIntent().getSerializableExtra("update");
-            phonebookRepository.updateContactInDatabase(contact);
-        }
-        if(getIntent().hasExtra("delete")) {
-            Contact contact = (Contact) getIntent().getSerializableExtra("delete");
-            phonebookRepository.deleteContactFromDatabase(contact);
-        }
     }
 
     public void addContact(View view) {
@@ -66,8 +48,31 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    private void fetchDataForList() {
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        fetchDataForList();
+        contactListAdapter.updateData(contactList);
+        contactListAdapter.notifyDataSetChanged();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchDataForList();
+        contactListAdapter.updateData(contactList);
+        contactListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+        fetchDataForList();
+        contactListAdapter.updateData(contactList);
+        contactListAdapter.notifyDataSetChanged();
+    }
+
+    private void fetchDataForList() {
         contactList = phonebookRepository.getAllContactsFromDatabase();
         contactCount = phonebookRepository.getContactCountInDatabase();
     }
