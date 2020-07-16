@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.phonebook.dataHandler.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactListHolder> {
+public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ContactListHolder> implements Filterable {
 
     private List<Contact> contactList;
     private Context context;
@@ -70,6 +73,42 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         this.contactList = contactList;
         Log.i("List getting updated!","");
     }
+
+    @Override
+    public Filter getFilter() {
+        return contactFilter;
+    }
+
+    private Filter contactFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Contact> filteredContacts = new ArrayList<>();
+            if(charSequence == null || charSequence.length() == 0) {
+                filteredContacts.addAll(contactList);
+            }
+            else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for(Contact contact: contactList) {
+                    if(contact.getFirstName().toLowerCase().trim().contains(filterPattern) ||
+                            contact.getLastName().toLowerCase().trim().contains(filterPattern)) {
+                        filteredContacts.add(contact);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filteredContacts;
+            return filterResults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            contactList.clear();
+            contactList.addAll((List<Contact>) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class ContactListHolder extends RecyclerView.ViewHolder {
 

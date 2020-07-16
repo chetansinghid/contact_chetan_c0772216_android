@@ -10,7 +10,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -29,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private int contactCount = 0;
     private RecyclerView recyclerView;
     private ContactListAdapter contactListAdapter;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         checkRequiredPermissions();
-        phonebookRepository = new PhonebookRepository(this.getApplication());
+        setupDbandSearch();
         fetchDataForList();
         setupListData();
 
+    }
+
+    private void setupDbandSearch() {
+        phonebookRepository = new PhonebookRepository(this.getApplication());
+        searchView = findViewById(R.id.search_view);
+        setupSearchListener();
     }
 
     public void addContact(View view) {
@@ -50,26 +56,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchDataForList();
-        contactListAdapter.updateData(contactList);
-        contactListAdapter.notifyDataSetChanged();
+        resetResults();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        fetchDataForList();
-        contactListAdapter.updateData(contactList);
-        contactListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onActivityReenter(int resultCode, Intent data) {
-        super.onActivityReenter(resultCode, data);
-        Log.i("In Activity reenter", "");
-        fetchDataForList();
-        contactListAdapter.updateData(contactList);
-        contactListAdapter.notifyDataSetChanged();
+        resetResults();
     }
 
     private void fetchDataForList() {
@@ -103,5 +96,35 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    private void setupSearchListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                resetResults();
+                contactListAdapter.getFilter().filter(s);
+                return false;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                resetResults();
+                return false;
+            }
+        });
+    }
+
+    private void resetResults() {
+        fetchDataForList();
+        contactListAdapter.updateData(contactList);
+        contactListAdapter.notifyDataSetChanged();
     }
 }
