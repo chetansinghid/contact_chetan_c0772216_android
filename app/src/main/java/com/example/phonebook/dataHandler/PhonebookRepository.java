@@ -23,6 +23,7 @@ public class PhonebookRepository {
         }
         else {
             new PhonebookRepository.InsertContact(contactDataInterface).execute(contact);
+            Log.i("DB insertion!", "Added!");
         }
     }
 

@@ -10,8 +10,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private PhonebookRepository phonebookRepository;
     private List<Contact> contactList = new ArrayList();
     private int contactCount = 0;
-//    private Button addContactButton;
     private RecyclerView recyclerView;
     private ContactListAdapter contactListAdapter;
 
@@ -49,14 +48,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        fetchDataForList();
-        contactListAdapter.updateData(contactList);
-        contactListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         fetchDataForList();
@@ -65,8 +56,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fetchDataForList();
+        contactListAdapter.updateData(contactList);
+        contactListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onActivityReenter(int resultCode, Intent data) {
         super.onActivityReenter(resultCode, data);
+        Log.i("In Activity reenter", "");
         fetchDataForList();
         contactListAdapter.updateData(contactList);
         contactListAdapter.notifyDataSetChanged();
@@ -79,9 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupListData() {
         recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
         contactListAdapter = new ContactListAdapter(MainActivity.this, contactList);
-        recyclerView.setAdapter(contactListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        recyclerView.setAdapter(contactListAdapter);
     }
 
     private void checkRequiredPermissions() {

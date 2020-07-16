@@ -2,6 +2,7 @@ package com.example.phonebook;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ContactListHolder holder, final int position) {
         String name;
-        char buttonText =contactList.get(position).getFirstName().charAt(0);
+        char buttonText = Character.toUpperCase(contactList.get(position).getFirstName().charAt(0));
         if(contactList.get(position).getLastName() == null) {
             name = contactList.get(position).getFirstName();
         }
@@ -47,7 +48,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         }
         holder.contactName.setText(name);
         holder.phoneNo.setText(contactList.get(position).getPhoneNo());
-        holder.iconButton.setText(Character.toUpperCase(buttonText));
+        holder.iconButton.setText(String.valueOf(buttonText));
         holder.cellLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +57,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 context.startActivity(intent);
             }
         });
+        Log.i("List item added!","");
 
     }
 
@@ -66,6 +68,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     public void updateData(List<Contact> contactList) {
         this.contactList = contactList;
+        Log.i("List getting updated!","");
     }
 
     public class ContactListHolder extends RecyclerView.ViewHolder {

@@ -53,7 +53,7 @@ public class addOrEditContact extends AppCompatActivity {
             deleteButton.setVisibility(View.GONE);
         }
         else {
-            char initials = contact.getFirstName().charAt(0);
+            char initials = Character.toUpperCase(contact.getFirstName().charAt(0));
             firstName.setText(contact.getFirstName());
             phoneNumber.setText(contact.getPhoneNo());
             if(contact.getLastName() != null) {
@@ -66,7 +66,7 @@ public class addOrEditContact extends AppCompatActivity {
                 address.setText(contact.getAddress());
             }
             saveButton.setText("Update");
-            initialsText.setText(Character.toUpperCase(initials));
+            initialsText.setText(String.valueOf(initials));
         }
     }
 
@@ -121,11 +121,11 @@ public class addOrEditContact extends AppCompatActivity {
 
     private void setObject() {
         if(isNew) {
-            contact = new Contact(firstName.getText().toString(), Integer.parseInt(phoneNumber.getText().toString()));
+            contact = new Contact(firstName.getText().toString(), phoneNumber.getText().toString());
         }
         else {
             contact.setFirstName(firstName.getText().toString());
-            contact.setPhoneNo(Integer.parseInt(phoneNumber.getText().toString()));
+            contact.setPhoneNo(phoneNumber.getText().toString());
         }
 
         if(lastName.getText() != null) {

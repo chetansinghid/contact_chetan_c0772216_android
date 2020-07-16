@@ -15,12 +15,12 @@ public class Contact implements Serializable {
     private String email;
     @PrimaryKey
     @NonNull
-    private int phoneNo;
+    private String phoneNo;
     private String address;
 
 //    constructor
 
-    public Contact(@NonNull String firstName, int phoneNo) {
+    public Contact(@NonNull String firstName, String phoneNo) {
         this.firstName = firstName;
         this.phoneNo = phoneNo;
     }
@@ -52,11 +52,11 @@ public class Contact implements Serializable {
         this.email = email;
     }
 
-    public int getPhoneNo() {
+    public String getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(int phoneNo) {
+    public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
     }
 
