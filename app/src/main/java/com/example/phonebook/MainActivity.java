@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addContact(View view) {
-        Toast.makeText(MainActivity.this, "Hello", Toast.LENGTH_LONG);
+        Intent intent = new Intent(this, addOrEditContact.class);
+        this.startActivity(intent);
     }
 
     private void setupInitialData() {

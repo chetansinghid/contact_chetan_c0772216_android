@@ -1,6 +1,7 @@
 package com.example.phonebook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.phonebook.dataHandler.Contact;
@@ -34,8 +36,9 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactListHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ContactListHolder holder, final int position) {
         String name;
+        char buttonText =contactList.get(position).getFirstName().charAt(0);
         if(contactList.get(position).getLastName() == null) {
             name = contactList.get(position).getFirstName();
         }
@@ -44,7 +47,16 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         }
         holder.contactName.setText(name);
         holder.phoneNo.setText(contactList.get(position).getPhoneNo());
-        holder.iconButton.setText(contactList.get(position).getFirstName().toCharArray()[0]);
+        holder.iconButton.setText(Character.toUpperCase(buttonText));
+        holder.cellLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, addOrEditContact.class);
+                intent.putExtra("edit", contactList.get(position));
+                context.startActivity(intent);
+            }
+        });
+
     }
 
     @Override
@@ -56,13 +68,14 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
         Button iconButton;
         TextView contactName, phoneNo;
-
+        ConstraintLayout cellLayout;
 
         public ContactListHolder(@NonNull View itemView) {
             super(itemView);
             iconButton = itemView.findViewById(R.id.icon_button);
             contactName = itemView.findViewById(R.id.contact_name);
             phoneNo = itemView.findViewById(R.id.contact_number);
+            cellLayout = itemView.findViewById(R.id.contact_cell_layout);
         }
     }
 }
