@@ -37,8 +37,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         checkRequiredPermissions();
-        setupInitialData();
+        phonebookRepository = new PhonebookRepository(this.getApplication());
 
+        checkIntentIfAvailable();
+        fetchDataForList();
+        setupListData();
+
+    }
+
+    public void checkIntentIfAvailable() {
+        if(getIntent().hasExtra("save")) {
+            System.out.println("getting to intent");
+            Contact contact = (Contact) getIntent().getSerializableExtra("save");
+            phonebookRepository.insertContactInDatabase(contact);
+        }
+        if(getIntent().hasExtra("update")) {
+            Contact contact = (Contact) getIntent().getSerializableExtra("update");
+            phonebookRepository.updateContactInDatabase(contact);
+        }
+        if(getIntent().hasExtra("delete")) {
+            Contact contact = (Contact) getIntent().getSerializableExtra("delete");
+            phonebookRepository.deleteContactFromDatabase(contact);
+        }
     }
 
     public void addContact(View view) {
@@ -46,13 +66,8 @@ public class MainActivity extends AppCompatActivity {
         this.startActivity(intent);
     }
 
-    private void setupInitialData() {
-        fetchDataForList();
-        setupListData();
-    }
-
     private void fetchDataForList() {
-        phonebookRepository = new PhonebookRepository(this.getApplication());
+
         contactList = phonebookRepository.getAllContactsFromDatabase();
         contactCount = phonebookRepository.getContactCountInDatabase();
     }
