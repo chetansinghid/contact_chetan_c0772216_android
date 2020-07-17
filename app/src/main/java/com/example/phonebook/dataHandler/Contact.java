@@ -9,23 +9,32 @@ import java.io.Serializable;
 @Entity(tableName = "contact_table")
 public class Contact implements Serializable {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     @NonNull
     private String firstName;
     private String lastName;
     private String email;
-    @PrimaryKey
     @NonNull
     private String phoneNo;
     private String address;
 
 //    constructor
 
-    public Contact(@NonNull String firstName, String phoneNo) {
+    public Contact(@NonNull String firstName, @NonNull String phoneNo) {
         this.firstName = firstName;
         this.phoneNo = phoneNo;
     }
 
 //    getters and setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     @NonNull
     public String getFirstName() {
@@ -51,11 +60,11 @@ public class Contact implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
+    @NonNull
     public String getPhoneNo() {
         return phoneNo;
     }
-
+    @NonNull
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
     }

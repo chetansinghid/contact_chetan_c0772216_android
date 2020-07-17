@@ -139,7 +139,6 @@ public class PhonebookRepository {
             this.contactDataInterface = contactDataInterface;
         }
 
-
         @Override
         protected Integer doInBackground(Void... voids) {
             return contactDataInterface.getContactCount();

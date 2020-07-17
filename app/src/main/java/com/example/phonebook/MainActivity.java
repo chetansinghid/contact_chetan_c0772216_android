@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.phonebook.dataHandler.Contact;
@@ -25,10 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST = 1;
     private PhonebookRepository phonebookRepository;
     private List<Contact> contactList = new ArrayList();
-    private int contactCount = 0;
+    private String contactCount = "";
     private RecyclerView recyclerView;
     private ContactListAdapter contactListAdapter;
     private SearchView searchView;
+    private TextView contactCountView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
         setupDbandSearch();
         fetchDataForList();
         setupListData();
-
     }
 
     private void setupDbandSearch() {
         phonebookRepository = new PhonebookRepository(this.getApplication());
         searchView = findViewById(R.id.search_view);
+        contactCountView = findViewById(R.id.contact_count);
         setupSearchListener();
     }
 
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchDataForList() {
         contactList = phonebookRepository.getAllContactsFromDatabase();
-        contactCount = phonebookRepository.getContactCountInDatabase();
+        contactCount = phonebookRepository.getContactCountInDatabase() + " Contact(s)";
     }
 
     private void setupListData() {
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_EXTERNAL_STORAGE) && ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE))
             {
-                Toast.makeText(MainActivity.this, "Permissions required to save data in device!", Toast.LENGTH_LONG);
+                Toast.makeText(MainActivity.this, "Permissions required to save data in device!", Toast.LENGTH_LONG).show();
             } else
             {
                 ActivityCompat.requestPermissions(MainActivity.this,
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String s) {
                 resetResults();
+                contactCountView.setVisibility(View.GONE);
                 contactListAdapter.getFilter().filter(s);
                 return false;
             }
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onClose() {
                 resetResults();
+                contactCountView.setVisibility(View.VISIBLE);
                 return false;
             }
         });
@@ -124,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetResults() {
         fetchDataForList();
+        contactCountView.setText(contactCount);
         contactListAdapter.updateData(contactList);
         contactListAdapter.notifyDataSetChanged();
     }

@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">My Phonebook</string>
     <string name="search">Search Contacts</string>
+    <string name="main_screen_title">Contacts</string>
+    <string name="add_contact_button">+</string>
 </resources>
